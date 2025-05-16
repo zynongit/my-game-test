@@ -1,0 +1,36 @@
+name: Unity Build
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Configura o Unity
+      - name: Set up Unity
+        uses: game-ci/unity-setup@v2
+        with:
+          unity-version: "2022.3.11f1"  # Altere para sua versão
+
+      # Build para Windows
+      - name: Build Windows
+        uses: game-ci/unity-builder@v2
+        with:
+          targetPlatform: Win64
+          projectPath: .
+
+      # Build para WebGL
+      - name: Build WebGL
+        uses: game-ci/unity-builder@v2
+        with:
+          targetPlatform: WebGL
+          projectPath: .
+
+      # Upload dos builds como artefatos
+      - name: Upload Builds
+        uses: actions/upload-artifact@v3
+        with:
+          name: builds
+          path: build/
